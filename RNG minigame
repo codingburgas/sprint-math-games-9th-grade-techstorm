@@ -4,7 +4,8 @@
 
 using namespace std;
 
-int main() {
+//function to play 1 round of the game
+void playGame() {
   srand(time(0)); //sets the seed for rng and time is used for randomness
 
   int secretNumber = rand() % 100 + 1;
@@ -22,7 +23,7 @@ int main() {
     attempts++; // counts how many times you guessed
 
     // failsafe for invalid inputs
-    if (guess > 101 || guess < -1) {
+    if (guess > 100 || guess < -1) {
       cout << "\033[1;31mInvalid input. Please enter a number between 1 and 100.\033[0m" << endl; // color for failsafe
       continue; // skip to the normal stuff
     }
@@ -37,6 +38,16 @@ int main() {
   } while (guess != secretNumber);
   // cout for the above^^
   cout << "\033[1;32mCongratulations! You guessed the number " << secretNumber << " in " << attempts << " attempts.\033[0m" << endl; // color for win
+}
+
+int main() {
+  char playAgain;
+
+  do {
+    playGame(); //thing for rerunning the game
+    cout << "Would you like to play again? (y/n): ";
+    cin >> playAgain;
+  } while (playAgain == 'y' || playAgain == 'Y');
 
   return 0;
 }
