@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
+#include <limits> // for numeric_limits
 
 using namespace std;
 
@@ -19,11 +20,16 @@ void playGame() {
 
   do { // thing for guessing
     cout << "Enter your guess: ";
-    cin >> guess; 
+    if (!(cin >> guess)) { // Check if input is an integer
+      cout << "\033[1;31mInvalid input. Please enter a valid number.\033[0m" << endl;
+      cin.clear(); // clear errors
+      cin.ignore(numeric_limits<streamsize>::max(), '\n'); // get rid of invalid input
+      continue; 
+    }
     attempts++; // counts how many times you guessed
 
     // failsafe for invalid inputs
-    if (guess > 100 || guess < -1) {
+    if (guess > 100 || guess < 1) {
       cout << "\033[1;31mInvalid input. Please enter a number between 1 and 100.\033[0m" << endl; // color for failsafe
       continue; // skip to the normal stuff
     }
