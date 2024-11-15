@@ -1,0 +1,42 @@
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+
+using namespace std;
+
+int main() {
+  srand(time(0)); //sets the seed for rng and time is used for randomness
+
+  int secretNumber = rand() % 100 + 1;
+  // rng number generator
+  int guess; // user input
+  int attempts = 0;
+  // counter for how many times you guessed
+
+  cout << "\033[1;36mWelcome to the Number Guessing Game!\033[0m" << endl; // color for welcome mesage
+  cout << "\033[1;36mYou must guess a secret number between 1 and 100.\033[0m" << endl;
+
+  do { // thing for guessing
+    cout << "Enter your guess: ";
+    cin >> guess; 
+    attempts++; // counts how many times you guessed
+
+    // failsafe for invalid inputs
+    if (guess > 101 || guess < -1) {
+      cout << "\033[1;31mInvalid input. Please enter a number between 1 and 100.\033[0m" << endl; // color for failsafe
+      continue; // skip to the normal stuff
+    }
+
+    // if thing for telling you if its lower or higher
+    if (guess < secretNumber) {
+      cout << "\033[1;31mToo low! Try again.\033[0m" << endl; // color for under
+    } else if (guess > secretNumber) {
+      cout << "\033[1;31mToo high! Try again.\033[0m" << endl; // color for over
+    }
+   // thing for telling you when you get it right
+  } while (guess != secretNumber);
+  // cout for the above^^
+  cout << "\033[1;32mCongratulations! You guessed the number " << secretNumber << " in " << attempts << " attempts.\033[0m" << endl; // color for win
+
+  return 0;
+}
