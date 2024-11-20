@@ -1,0 +1,181 @@
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+#include <limits> // for numeric_limits
+#include <thread>
+#include <chrono>
+#include <conio.h>
+
+using namespace std;
+
+// Constants for Dodge the Object game
+const int WIDTH = 10;   // Width of the game grid
+const int HEIGHT = 10;  // Height of the game grid
+
+// Function to display the grid
+void displayGrid(char grid[HEIGHT][WIDTH]) {
+    system("cls"); // Clear the console
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++) {
+            cout << grid[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+// Dodge the Object game
+void playDodgeGame() {
+    char grid[HEIGHT][WIDTH];
+    int playerPos = WIDTH / 2;
+    bool gameOver = false;
+    int score = 0;
+
+    srand(time(0));
+
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++) {
+            grid[i][j] = '.';
+        }
+    }
+    grid[HEIGHT - 1][playerPos] = 'P';
+
+    cout << "\033[1;36mWelcome to the Dodge the Object Game!\033[0m" << endl;
+    cout << "Move left ('A') or right ('D') to dodge falling objects." << endl;
+    cout << "Press any key to start!" << endl;
+    _getch();
+
+    while (!gameOver) {
+        int obstaclePos = rand() % WIDTH;
+        grid[0][obstaclePos] = 'O';
+
+        for (int i = HEIGHT - 1; i >= 0; i--) {
+            for (int j = 0; j < WIDTH; j++) {
+                if (grid[i][j] == 'O') {
+                    if (i == HEIGHT - 1) {
+                        grid[i][j] = '.';
+                    }
+                    else {
+                        grid[i + 1][j] = 'O';
+                        grid[i][j] = '.';
+                    }
+                }
+            }
+        }
+
+        if (grid[HEIGHT - 1][playerPos] == 'O') {
+            gameOver = true;
+            break;
+        }
+
+        displayGrid(grid);
+
+        cout << "Score: " << score << endl;
+        cout << "Controls: 'A' to move left, 'D' to move right" << endl;
+
+        if (_kbhit()) {
+            char input = _getch();
+            grid[HEIGHT - 1][playerPos] = '.';
+
+            if (input == 'a' || input == 'A') {
+                playerPos = max(0, playerPos - 1);
+            }
+            else if (input == 'd' || input == 'D') {
+                playerPos = min(WIDTH - 1, playerPos + 1);
+            }
+
+            grid[HEIGHT - 1][playerPos] = 'P';
+        }
+
+        score++;
+        this_thread::sleep_for(chrono::milliseconds(500));
+    }
+
+    displayGrid(grid);
+    cout << "\033[1;31mGame Over! Your final score is: " << score - 1 << "\033[0m" << endl;
+}
+
+// Function to play 1 round of the RNG game
+void playGame() {
+    srand(time(0));
+
+    int secretNumber = rand() % 100 + 1;
+    int guess;
+    int attempts = 0;
+
+    cout << "\033[1;36mWelcome to the Number Guessing Game!\033[0m" << endl;
+    cout << "\033[1;36mYou must guess a secret number between 1 and 100.\033[0m" << endl;
+
+    do {
+        cout << "Enter your guess: ";
+        if (!(cin >> guess)) {
+            cout << "\033[1;31mInvalid input. Please enter a valid number.\033[0m" << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            continue;
+        }
+        attempts++;
+
+        if (guess > 100 || guess < 1) {
+            cout << "\033[1;31mInvalid input. Please enter a number between 1 and 100.\033[0m" << endl;
+            continue;
+        }
+
+        if (guess < secretNumber) {
+            cout << "\033[1;31mToo low! Try again.\033[0m" << endl;
+        }
+        else if (guess > secretNumber) {
+            cout << "\033[1;31mToo high! Try again.\033[0m" << endl;
+        }
+    } while (guess != secretNumber);
+
+    cout << "\033[1;32mCongratulations! You guessed the number " << secretNumber << " in " << attempts << " attempts.\033[0m" << endl;
+}
+
+// Main menu function
+void displayMainMenu() {
+    cout << "\033[1;34m";
+    cout << "###    ###  #####  ## ###    ##     ###    ### ####### ###    ## ##    ## " << endl;
+    cout << "####  #### ##   ## ## ####   ##     ####  #### ##      ####   ## ##    ## " << endl;
+    cout << "## #### ## ####### ## ## ##  ##     ## #### ## #####   ## ##  ## ##    ## " << endl;
+    cout << "##  ##  ## ##   ## ## ##  ## ##     ##  ##  ## ##      ##  ## ## ##    ## " << endl;
+    cout << "##      ## ##   ## ## ##   ####     ##      ## ####### ##   ####  ######  " << endl;
+    cout << "\033[0m" << endl;
+    cout << "1. Start Number Guessing Game" << endl;
+    cout << "2. Start Dodge the Object Game" << endl;
+    cout << "3. Exit" << endl;
+    cout << "Choose an option: ";
+}
+
+int main() {
+    char playAgain;
+    int choice;
+
+    do {
+        displayMainMenu();
+        cin >> choice;
+
+        if (choice == 1) {
+            do {
+                playGame();
+                cout << "Would you like to play again? (y to replay / n to return to the main menu): ";
+                cin >> playAgain;
+            } while (playAgain == 'y' || playAgain == 'Y');
+        }
+        else if (choice == 2) {
+            do {
+                playDodgeGame();
+                cout << "Would you like to play again? (y to replay / n to return to the main menu): ";
+                cin >> playAgain;
+            } while (playAgain == 'y' || playAgain == 'Y');
+        }
+        else if (choice == 3) {
+            cout << "Exiting the game. Goodbye!" << endl;
+            break;
+        }
+        else {
+            cout << "\033[1;31mInvalid choice. Please select a valid option.\033[0m" << endl;
+        }
+    } while (choice != 3);
+
+    return 0;
+}
