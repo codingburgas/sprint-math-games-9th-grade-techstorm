@@ -1,0 +1,153 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <thread>  // For std::this_thread::sleep_for
+#include <chrono>  // For std::chrono
+#include <conio.h> // For _kbhit() and _getch()
+
+using namespace std;
+
+const int WIDTH = 10;   // Width of the game grid
+const int HEIGHT = 10;  // Height of the game grid
+
+// Function to display the grid
+void displayGrid(char grid[HEIGHT][WIDTH]) {
+    system("cls"); // Clear the console (use "clear" on Linux/Mac)
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++) {
+            cout << grid[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+// Main game function
+int playDodgeGame() {
+    char grid[HEIGHT][WIDTH]; // 2D array for the grid
+    int playerPos = WIDTH / 2; // Start player in the middle
+    bool gameOver = false;
+    int score = 0;
+
+    srand(time(0)); // Seed random number generator
+
+    // Initialize the grid with dots
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++) {
+            grid[i][j] = '.';
+        }
+    }
+    grid[HEIGHT - 1][playerPos] = 'P'; // Place player at the bottom
+
+    cout << "\033[1;36mWelcome to the Dodge the Object Game!\033[0m" << endl;
+    cout << "\033[1;36mMove left ('A') or right ('D') to dodge falling objects.\033[0m" << endl;
+    cout << "\033[1;33mPress any key to start!\033[0m" << endl;
+    _getch(); // Wait for key press to start the game
+
+    while (!gameOver) {
+        // Spawn a new obstacle at a random column on the top row
+        int obstaclePos = rand() % WIDTH;
+        grid[0][obstaclePos] = 'O';
+
+        // Move obstacles down
+        for (int i = HEIGHT - 1; i >= 0; i--) {
+            for (int j = 0; j < WIDTH; j++) {
+                if (grid[i][j] == 'O') {
+                    if (i == HEIGHT - 1) {
+                        grid[i][j] = '.'; // Clear obstacle if it hits the ground
+                    }
+                    else {
+                        grid[i + 1][j] = 'O'; // Move obstacle down
+                        grid[i][j] = '.';    // Clear previous position
+                    }
+                }
+            }
+        }
+
+        // Check for collision
+        if (grid[HEIGHT - 1][playerPos] == 'O') {
+            gameOver = true;
+            break;
+        }
+
+        // Display the grid
+        displayGrid(grid);
+
+        // Display score
+        cout << "\033[1;32mScore: " << score << "\033[0m" << endl;
+        cout << "\033[1;36mControls: 'A' to move left, 'D' to move right\033[0m" << endl;
+
+        // Check for user input in real-time
+        if (_kbhit()) { // Check if a key was pressed
+            char input = _getch(); // Get the key press
+
+            grid[HEIGHT - 1][playerPos] = '.'; // Clear current player position
+
+            if (input == 'a' || input == 'A') {
+                playerPos = max(0, playerPos - 1); // Move left
+            }
+            else if (input == 'd' || input == 'D') {
+                playerPos = min(WIDTH - 1, playerPos + 1); // Move right
+            }
+
+            grid[HEIGHT - 1][playerPos] = 'P'; // Update player position
+        }
+
+        // Increase score and slow down the game loop
+        score++;
+        this_thread::sleep_for(chrono::milliseconds(500)); // Adjust delay to control game speed
+    }
+
+    // Display game over and final score
+    displayGrid(grid);
+    cout << "\033[1;31mGame Over! Your final score is: " << score - 1 << "\033[0m" << endl;
+    return score - 1;
+}
+
+// Main menu function
+void mainMenu() {
+    char choice;
+    do {
+        system("cls");
+        cout << "\033[1;34mDodge the Object Game - Main Menu\033[0m" << endl;
+        cout << "\033[1;36m1. Play Dodge the Object Game\033[0m" << endl;
+        cout << "\033[1;36m2. Quit\033[0m" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        if (choice == '1') {
+            int finalScore = playDodgeGame();
+
+            // Replay or return menu
+            char replayChoice;
+            do {
+                cout << "\033[1;36mYour final score is: " << finalScore << "\033[0m" << endl;
+                cout << "\033[1;33mWould you like to:\033[0m" << endl;
+                cout << "\033[1;36m1. Play again\033[0m" << endl;
+                cout << "\033[1;36m2. Return to main menu\033[0m" << endl;
+                cin >> replayChoice;
+
+                if (replayChoice == '1') {
+                    finalScore = playDodgeGame();
+                }
+                else if (replayChoice == '2') {
+                    break;
+                }
+                else {
+                    cout << "\033[1;31mInvalid choice. Please try again.\033[0m" << endl;
+                }
+            } while (replayChoice != '2');
+        }
+        else if (choice == '2') {
+            cout << "\033[1;32mThank you for playing! Goodbye!\033[0m" << endl;
+        }
+        else {
+            cout << "\033[1;31mInvalid choice. Please try again.\033[0m" << endl;
+        }
+
+    } while (choice != '2');
+}
+
+int main() {
+    mainMenu();
+    return 0;
+}
