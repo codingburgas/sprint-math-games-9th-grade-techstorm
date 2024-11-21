@@ -134,11 +134,11 @@ void playGame() {
 // Main menu function
 void displayMainMenu() {
     cout << "\033[1;34m";
-    cout << "###    ###  #####  ## ###    ##     ###    ### ####### ###    ## ##    ## " << endl;
-    cout << "####  #### ##   ## ## ####   ##     ####  #### ##      ####   ## ##    ## " << endl;
-    cout << "## #### ## ####### ## ## ##  ##     ## #### ## #####   ## ##  ## ##    ## " << endl;
-    cout << "##  ##  ## ##   ## ## ##  ## ##     ##  ##  ## ##      ##  ## ## ##    ## " << endl;
-    cout << "##      ## ##   ## ## ##   ####     ##      ## ####### ##   ####  ######  " << endl;
+    cout << " [[       ]]      []        []     [[    ]        [[      ]]   [[[[   [[    ]   [        ]  " << endl;
+    cout << " [ [     ] ]     [  ]              [ [   ]        [ [    ] ]   [      [ [   ]   [        ] " << endl;
+    cout << " [   [  ]  ]    [    ]      []     [  [  ]        [  [  ]  ]   [[[[   [  [  ]   [        ] " << endl;
+    cout << " [    []   ]   [- - - -]    []     [   [ ]        [   []   ]   [      [   [ ]    [      ]   " << endl;
+    cout << " [         ]  [         ]   []     [    []        [        ]   [[[[   [    []     \\____/   " << endl;
     cout << "\033[0m" << endl;
     cout << "1. Start Number Guessing Game" << endl;
     cout << "2. Start Dodge the Object Game" << endl;
@@ -156,6 +156,7 @@ int main() {
 
         if (choice == 1) {
             do {
+
                 playGame();
                 cout << "Would you like to play again? (y to replay / n to return to the main menu): ";
                 cin >> playAgain;
@@ -179,3 +180,4 @@ int main() {
 
     return 0;
 }
+
