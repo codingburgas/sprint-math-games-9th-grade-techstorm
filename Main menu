@@ -1,12 +1,83 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
-#include <limits> // for numeric_limits
+#include <limits>
 #include <thread>
 #include <chrono>
 #include <conio.h>
+#include "raylib.h"
 
 using namespace std;
+
+// Axe Game
+void playAxeGame() {
+    // Window dimensions
+    int width{ 800 };
+    int height{ 450 };
+    InitWindow(width, height, "Axe_Game");
+
+    // Circle coordinates
+    int circle_x{ 300 };
+    int circle_y{ 300 };
+    int circle_radius{ 35 };
+
+    // Axe coordinates
+    int axe_x{ 500 };
+    int axe_y{ 0 };
+    int axe_length{ 60 };
+    int direction{ 10 };
+
+    SetTargetFPS(70);
+
+    while (!WindowShouldClose()) {
+        // Update the edges
+        int l_circle_x = circle_x - circle_radius;
+        int r_circle_x = circle_x + circle_radius;
+        int u_circle_y = circle_y - circle_radius;
+        int b_circle_y = circle_y + circle_radius;
+
+        int l_axe_x = axe_x;
+        int r_axe_x = axe_x + axe_length;
+        int u_axe_y = axe_y;
+        int b_axe_y = axe_y + axe_length;
+
+        // Update collision_with_axe
+        bool collision_with_axe =
+            (b_axe_y >= u_circle_y) &&
+            (u_axe_y <= b_circle_y) &&
+            (r_axe_x >= l_circle_x) &&
+            (l_axe_x <= r_circle_x);
+
+        BeginDrawing();
+        ClearBackground(WHITE);
+        if (collision_with_axe) {
+            DrawText("Game Over!", 400, 200, 20, RED);
+        }
+        else {
+            // Game logic begins
+            DrawCircle(circle_x, circle_y, circle_radius, BLUE);
+            DrawRectangle(axe_x, axe_y, axe_length, axe_length, RED);
+
+            // Move the axe
+            axe_y = axe_y + direction;
+            if (axe_y > height || axe_y < 0) {
+                direction = -direction;
+            }
+
+            // Move the circle
+            if (IsKeyDown(KEY_D) && circle_x + circle_radius < width) {
+                circle_x = circle_x + 10;
+            }
+            if (IsKeyDown(KEY_A) && circle_x - circle_radius > 0) {
+                circle_x = circle_x - 10;
+            }
+            // Game logic ends
+        }
+        EndDrawing();
+    }
+
+    CloseWindow();
+}
 
 // Constants for Dodge the Object game
 const int WIDTH = 10;   // Width of the game grid
@@ -95,7 +166,7 @@ void playDodgeGame() {
 }
 
 // Function to play 1 round of the RNG game
-void playGame() {
+void playNumberGuessingGame() {
     srand(time(0));
 
     int secretNumber = rand() % 100 + 1;
@@ -142,7 +213,8 @@ void displayMainMenu() {
     cout << "\033[0m" << endl;
     cout << "1. Start Number Guessing Game" << endl;
     cout << "2. Start Dodge the Object Game" << endl;
-    cout << "3. Exit" << endl;
+    cout << "3. Start Axe Game" << endl;
+    cout << "4. Exit" << endl;
     cout << "Choose an option: ";
 }
 
@@ -156,8 +228,7 @@ int main() {
 
         if (choice == 1) {
             do {
-
-                playGame();
+                playNumberGuessingGame();
                 cout << "Would you like to play again? (y to replay / n to return to the main menu): ";
                 cin >> playAgain;
             } while (playAgain == 'y' || playAgain == 'Y');
@@ -170,14 +241,21 @@ int main() {
             } while (playAgain == 'y' || playAgain == 'Y');
         }
         else if (choice == 3) {
+            do {
+                playAxeGame();
+                cout << "Would you like to play again? (y to replay / n to return to the main menu): ";
+                cin >> playAgain;
+            } while (playAgain == 'y' || playAgain == 'Y');
+        }
+        else if (choice == 4) {
             cout << "Exiting the game. Goodbye!" << endl;
             break;
         }
         else {
             cout << "\033[1;31mInvalid choice. Please select a valid option.\033[0m" << endl;
         }
-    } while (choice != 3);
+
+    } while (choice != 4);
 
     return 0;
 }
-
