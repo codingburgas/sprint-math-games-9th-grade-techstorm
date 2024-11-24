@@ -1,4 +1,4 @@
-# Sprint-9th-grade-Math-Games
+# Sprint-9th-grade-TechStorm
 Tech storm!
 Our team is TechStorm!
 Our members are:
