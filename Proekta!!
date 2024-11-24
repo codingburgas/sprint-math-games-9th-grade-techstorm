@@ -20,8 +20,14 @@ void playGame() {
     
 
 
+int main() {
+  char playAgain;
 
-
+  do {
+    playGame(); //thing for rerunning the game
+    cout << "Would you like to play again? (y/n): ";
+    cin >> playAgain;
+  } while (playAgain == 'y' || playAgain == 'y
 
 
 
