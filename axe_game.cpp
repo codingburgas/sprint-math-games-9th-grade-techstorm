@@ -9,9 +9,9 @@ int main()
     InitWindow(width,height,"Axe_Game");
 
     //circle cordinats
-    int circle_x{200};
-    int circle_y{200};
-    int circle_radius{25};
+    int circle_x{300};
+    int circle_y{300};
+    int circle_radius{35};
 
     //circle edges
     int l_circle_x{circle_x - circle_radius};
@@ -21,9 +21,9 @@ int main()
 
 
     //axe cordinats
-    int axe_x{400};
+    int axe_x{500};
     int axe_y{0};
-    int axe_lenght{50};
+    int axe_lenght{60};
 
     //axe edges
     int l_axe_x{axe_x};
@@ -39,7 +39,7 @@ int main()
                        (r_axe_x >= l_circle_x) &&
                        (l_axe_x <= r_circle_x);
 
-    SetTargetFPS(60);
+    SetTargetFPS(70);
      while (WindowShouldClose() == false )
     {
         BeginDrawing();
