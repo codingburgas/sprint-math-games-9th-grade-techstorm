@@ -15,8 +15,7 @@ void playGame() {
     int attempts = 0;
     // counter for how many times you guessed
 
-    cout << "\033[1;36mWelcome to the Number Guessing Game!\033[0m" << endl; // color for welcome mesage
-    cout << "\033[1;36mYou must guess a secret number between 1 and 100.\033[0m" << endl;
+
 
     
 
