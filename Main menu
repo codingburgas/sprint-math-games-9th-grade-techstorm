@@ -44,14 +44,14 @@ void playAxeGame() {
         // Update collision_with_axe
         bool collision_with_axe =
             (b_axe_y >= u_circle_y) &&
-            (u_axe_y <= b_circle_y) &&
+            (u_axe_y <= b_circle_y) && //Hitboxes
             (r_axe_x >= l_circle_x) &&
             (l_axe_x <= r_circle_x);
 
-        BeginDrawing();
-        ClearBackground(WHITE);
+        BeginDrawing(); //Double buffering
+        ClearBackground(WHITE); //Avoids flickering
         if (collision_with_axe) {
-            DrawText("Game Over!", 400, 200, 20, RED);
+            DrawText("Game Over!", 400, 200, 20, RED); //Detects collisions
         }
         else {
             // Game logic begins
@@ -101,7 +101,7 @@ void playDodgeGame() {
     bool gameOver = false;
     int score = 0;
 
-    srand(time(0));
+    srand(time(0)); //For RNG using current time as seed
 
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
@@ -113,7 +113,7 @@ void playDodgeGame() {
     cout << "\033[1;36mWelcome to the Dodge the Object Game!\033[0m" << endl;
     cout << "Move left ('A') or right ('D') to dodge falling objects." << endl;
     cout << "Press any key to start!" << endl;
-    _getch();
+    _getch(); //Waits for the first user input before starting game
 
     while (!gameOver) {
         int obstaclePos = rand() % WIDTH;
@@ -143,7 +143,7 @@ void playDodgeGame() {
         cout << "Score: " << score << endl;
         cout << "Controls: 'A' to move left, 'D' to move right" << endl;
 
-        if (_kbhit()) {
+        if (_kbhit()) { //Checks for user inputs
             char input = _getch();
             grid[HEIGHT - 1][playerPos] = '.';
 
@@ -158,10 +158,10 @@ void playDodgeGame() {
         }
 
         score++;
-        this_thread::sleep_for(chrono::milliseconds(500));
+        this_thread::sleep_for(chrono::milliseconds(200)); //How fast the objects for the game move
     }
 
-    displayGrid(grid);
+    displayGrid(grid); //Displays the grid for Dodge game
     cout << "\033[1;31mGame Over! Your final score is: " << score - 1 << "\033[0m" << endl;
 }
 
@@ -181,7 +181,7 @@ void playNumberGuessingGame() {
         if (!(cin >> guess)) {
             cout << "\033[1;31mInvalid input. Please enter a valid number.\033[0m" << endl;
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); //Code for clearning wrong inputs
             continue;
         }
         attempts++;
