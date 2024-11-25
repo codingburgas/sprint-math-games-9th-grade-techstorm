@@ -9,8 +9,6 @@ Viktor Nikov
 
 Dessislav Alexsandrov
 
-Anastas Apostolov
-
 .
 
 
