@@ -21,7 +21,7 @@ We made the whole project using c++.
 . 
 
 
-First of all discussed our project then Raya and Anastas started doing the design of the games.
+First of all discussed our project then Raya started doing the design of the games.
 Later Dessislav and Vikor started working on the project.
 After a few sessions we were finally done with our job. It took some time, but it was well worth it!
 .
